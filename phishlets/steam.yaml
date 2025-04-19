@@ -10,6 +10,7 @@ proxy_hosts:
 
 sub_filters:
   - {triggers_on: 'steamcommunity.com', orig_sub: 'login', domain: 'steamcommunity.com', search: 'https://{hostname}/ppsecure/', replace: 'https://{hostname}/ppsecure/', mimes: ['text/html']}
+  - {triggers_on: 'community.fastly.steamstatic.com', orig_sub: 'community.fastly', domain: 'steamstatic.com', search: 'https://community.fastly.steamstatic.com/(.*)?v=(.*)&l=(.*)&_cdn=fastly', replace: 'https://community.cloudflare.steamstatic.com/(.*)?v=(.*)&l=(.*)&_cdn=cloudflare', mimes: ['text/html', 'application/json', 'text/javascript', 'text/css', 'text/csv']}
 
 auth_tokens:
   - domain: 'steamcommunity.com'
